@@ -1,6 +1,5 @@
 package hello.service;
 
-public interface FooService
-{
+public interface FooService {
     void print(String string);
 }

@@ -11,17 +11,14 @@ import org.springframework.instrument.classloading.LoadTimeWeaver;
 
 @Configuration
 @EnableLoadTimeWeaving(aspectjWeaving = EnableLoadTimeWeaving.AspectJWeaving.ENABLED)
-public class AppConfig implements LoadTimeWeavingConfigurer
-{
+public class AppConfig implements LoadTimeWeavingConfigurer {
     @Override
-    public LoadTimeWeaver getLoadTimeWeaver()
-    {
+    public LoadTimeWeaver getLoadTimeWeaver() {
         return new InstrumentationLoadTimeWeaver();
     }
-    
+
     @Bean
-    public ExceptionAspect exceptionAspect()
-    {
+    public ExceptionAspect exceptionAspect() {
         return Aspects.aspectOf(ExceptionAspect.class);
     }
 }
