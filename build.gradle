@@ -4,9 +4,14 @@ version '1.0-SNAPSHOT'
 
 apply plugin: 'java'
 apply plugin: 'idea'
+apply plugin: 'application'
 apply plugin: 'org.springframework.boot'
 
 sourceCompatibility = 1.8
+
+configurations {
+    runtimeAgent
+}
 
 buildscript {
     repositories {
@@ -25,8 +30,18 @@ repositories {
 }
 
 dependencies {
-    compile("org.springframework.boot:spring-boot-starter-web:1.5.10.RELEASE")
-    compile 'org.aspectj:aspectjweaver:1.8.13'
-    compile 'org.aspectj:aspectjrt:1.8.13'
-    compile 'org.projectlombok:lombok:1.16.20'
+    /** SPRING **/
+    compile 'org.springframework.boot:spring-boot-starter-web:1.5.10.RELEASE'
+    compile 'org.springframework.boot:spring-boot-starter-aop:1.5.10.RELEASE'
+    compile 'org.springframework:spring-instrument:5.0.3.RELEASE'
+
+    /** RUNTIME AGENTS **/
+    runtimeAgent "org.springframework:spring-instrument"
+    runtimeAgent "org.aspectj:aspectjweaver"
+}
+
+bootRun.doFirst {
+    def springInstrument = "-javaagent:" + configurations.runtimeAgent[0].absolutePath
+    def aspectJWeaver = "-javaagent:" + configurations.runtimeAgent[1].absolutePath
+    applicationDefaultJvmArgs = [springInstrument, aspectJWeaver]
 }

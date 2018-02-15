@@ -1,17 +1,17 @@
 package hello.aspect;
 
 import hello.service.FooService;
-import lombok.Value;
 import org.aspectj.lang.annotation.AfterThrowing;
 import org.aspectj.lang.annotation.Aspect;
+import org.springframework.beans.factory.annotation.Autowired;
 
 @Aspect
-@Value
 public class ExceptionAspect
 {
+    @Autowired
     private FooService fooService;
     
-    @AfterThrowing(pointcut = "execution(* *.*(..))", throwing = "throwable")
+    @AfterThrowing(pointcut = "execution(* *.*(..)) && !within(is(FinalType))", throwing = "throwable")
     public void processError(Throwable throwable)
     {
         fooService.print("Exception was thrown!");
